@@ -13,7 +13,6 @@ import { useCart } from './CartProvider';
 const CartScreen = () => {
   const { cartItems, increaseQuantity, decreaseQuantity, removeItem } =
     useCart();
-  const [selectedItem, setSelectedItem] = useState(null);
 
   const calculateTotalPrice = () => {
     return cartItems.reduce(
@@ -28,7 +27,6 @@ const CartScreen = () => {
 
   const handleDecreaseQuantity = (item) => {
     if (item.quantity === 1) {
-      // 아이템 수량이 1일 때, 삭제 확인 팝업 표시
       Alert.alert('삭제 확인', '장바구니에서 해당 상품을 삭제하시겠습니까?', [
         {
           text: '취소',
@@ -62,7 +60,9 @@ const CartScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.price}>{item.price.toLocaleString('ko-KR')}원</Text>
+      <Text style={styles.price}>
+        {(item.price * item.quantity).toLocaleString('ko-KR')}원
+      </Text>
     </View>
   );
 

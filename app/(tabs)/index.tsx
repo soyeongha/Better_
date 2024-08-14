@@ -82,9 +82,9 @@ const HomeScreen = () => {
         <Text style={styles.productName} numberOfLines={1} ellipsizeMode="tail">
           {item.name}
         </Text>
-        <Text style={styles.productPrice}>
-          ₩{Number(item.price * 1300).toLocaleString()}
-        </Text>
+        <Text style={styles.productPrice}>{`₩${(
+          parseInt(item.price) * 1600
+        ).toLocaleString()}`}</Text>
       </TouchableOpacity>
     );
   };
@@ -93,7 +93,7 @@ const HomeScreen = () => {
   const renderBrandSection = (brand, products) => (
     <View key={brand}>
       {/* 브랜드를 키로 사용하여 각 섹션을 생성합니다. */}
-      <Text style={styles.sectionTitle}>{brand}</Text>
+      <Text style={styles.brandName}>{brand}</Text>
       <FlatList
         data={products} // 브랜드에 해당하는 제품 목록
         renderItem={renderProductItem} // 각 아이템을 렌더링하는 함수
@@ -143,9 +143,17 @@ const styles = StyleSheet.create({
     height: 200, // 배너의 높이를 200으로 설정합니다.
   },
   sectionTitle: {
-    fontSize: 18, // 텍스트의 폰트 크기를 18로 설정합니다.
+    fontSize: 20, // 텍스트의 폰트 크기를 18로 설정합니다.
     fontWeight: 'bold', // 텍스트를 굵게 표시합니다.
-    marginVertical: 10, // 상하로 10 단위의 마진을 추가하여 위아래 여백을 만듭니다.
+    //  marginVertical: 20, // 상하로 10 단위의 마진을 추가하여 위아래 여백을 만듭니다.
+    marginTop: 20,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  brandName: {
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 20,
   },
   productContainer: {
     flex: 1, // 가로 방향으로 공간을 균등하게 분배합니다.
@@ -165,6 +173,7 @@ const styles = StyleSheet.create({
     height: 100, // 이미지의 높이를 100으로 설정합니다.
     borderRadius: 10, // 이미지의 모서리를 둥글게 만들기 위해 10으로 설정합니다.
     marginBottom: 10, // 이미지와 하단 요소 간의 여백을 10 단위로 설정합니다.
+    resizeMode: 'contain',
   },
   productBrand: {
     fontSize: 14, // 브랜드 텍스트의 폰트 크기를 14로 설정합니다.
@@ -178,7 +187,7 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: 12, // 제품 가격의 폰트 크기를 12로 설정합니다.
-    color: 'black', // 제품 가격의 텍스트 색상을 초록색으로 설정합니다.
+    color: 'black', // 제품 가격의 텍스트 색상
   },
   moreButton: {
     flex: 1, // 버튼의 크기를 컨테이너에 맞게 조정합니다.

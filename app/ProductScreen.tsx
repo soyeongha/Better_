@@ -22,7 +22,7 @@ type Product = {
   name: string;
   price: string;
   currency: string;
-  image_link: string;
+  api_featured_image: string;
   description: string;
 };
 
@@ -80,7 +80,9 @@ const ProductScreen = () => {
         name: product.name,
         price: parseInt(product.price) * 1600, // 가격을 한화로 변환
         quantity: 1,
-        image: product.image_link,
+        image: product.api_featured_image.startsWith('//')
+          ? `https:${product.api_featured_image}`
+          : product.api_featured_image,
       });
       setIsModalVisible(true); // 모달 표시
 
@@ -108,7 +110,11 @@ const ProductScreen = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Image
-          source={{ uri: product.image_link }}
+          source={{
+            uri: product.api_featured_image.startsWith('//')
+              ? `https:${product.api_featured_image}`
+              : product.api_featured_image,
+          }}
           style={styles.productImage}
         />
         <Hr />
