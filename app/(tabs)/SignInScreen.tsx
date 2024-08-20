@@ -1,7 +1,8 @@
+import { SignIn } from '@/api/Auth';
 import Header from '@/components/Header';
-import Hr from '@/components/Hr';
 import { GRAY } from '@/constants/Colors';
-import { useNavigation } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
+
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -9,23 +10,37 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Keyboard,
 } from 'react-native';
 
 const SignInScreen = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [isIdFocused, setIsIdFocused] = useState(false); // 아이디 입력란의 포커스 상태
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false); // 비밀번호 입력란의 포커스 상태
+  const [isIdFocused, setIsIdFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const passwordInputRef = useRef<TextInput>(null); // 비밀번호 입력 칸의 ref
-
+  const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <Header />, // Header 컴포넌트를 헤더로 사용
+      headerTitle: () => <Header />,
     });
   }, [navigation]);
+
+  const onSubmit = async () => {
+    Keyboard.dismiss();
+    try {
+      const user = await SignIn({ email: id, password });
+      console.log('로그인 성공:', user);
+
+      // 로그인 성공 시 ProfileScreen으로 이동하되 하단 탭은 유지
+      navigation.navigate('ProfileScreen');
+    } catch (error) {
+      console.log('로그인 실패:', error.message);
+      // 에러 메시지 표시 로직 추가
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -33,18 +48,18 @@ const SignInScreen = () => {
         style={[
           styles.input,
           { borderColor: isIdFocused ? GRAY.DARK : GRAY.DEFAULT },
-        ]} // 포커스에 따라 borderColor 변경
+        ]}
         placeholder="아이디 입력"
         value={id}
         onChangeText={setId}
-        onFocus={() => setIsIdFocused(true)} // 포커스 시 색상 변경
-        onBlur={() => setIsIdFocused(false)} // 포커스 해제 시 색상 원래대로
-        keyboardType={'email-address'}
-        returnKeyType={'next'}
-        onSubmitEditing={() => passwordInputRef.current?.focus()} // 다음을 누르면 비밀번호 입력 칸으로 이동
+        onFocus={() => setIsIdFocused(true)}
+        onBlur={() => setIsIdFocused(false)}
+        keyboardType="email-address"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordInputRef.current?.focus()}
       />
       <TextInput
-        ref={passwordInputRef} // 비밀번호 입력 칸 ref 설정
+        ref={passwordInputRef}
         style={[
           styles.input,
           { borderColor: isPasswordFocused ? GRAY.DARK : GRAY.DEFAULT },
@@ -53,25 +68,17 @@ const SignInScreen = () => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        onFocus={() => setIsPasswordFocused(true)} // 포커스 시 색상 변경
-        onBlur={() => setIsPasswordFocused(false)} // 포커스 해제 시 색상 원래대로
-        keyboardType={'default'}
-        returnKeyType={'done'}
+        onFocus={() => setIsPasswordFocused(true)}
+        onBlur={() => setIsPasswordFocused(false)}
+        keyboardType="default"
+        returnKeyType="done"
       />
-
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => {
-          /* 로그인 로직 추가 */
-        }}
-      >
+      <TouchableOpacity style={styles.loginButton} onPress={onSubmit}>
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={styles.signupButton}
         onPress={() => {
-          /* 회원가입 페이지로 이동 */
           navigation.navigate('SignUpScreen');
         }}
       >

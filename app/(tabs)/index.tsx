@@ -10,8 +10,17 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  LogBox,
 } from 'react-native'; // React Native의 기본 컴포넌트들을 가져옵니다.
 import BannerSlider from '@/components/BannerSlider'; // 배너 슬라이더 컴포넌트를 불러옵니다.
+import { initFirebase } from '@/api/firebase';
+
+//firebase 초기화 되었는지 확인 (앱의 최상단에서 한번만 호출)
+initFirebase();
+
+LogBox.ignoreLogs([
+  'You are initializing Firebase Auth for React Native without providing AsyncStorage',
+]);
 
 const { width } = Dimensions.get('window'); // 화면의 너비를 가져옵니다.
 

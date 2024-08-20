@@ -1,45 +1,22 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+// app/_layout.tsx
+
+import React from 'react';
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { CartProvider } from './CartProvider';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import Tabs from './(tabs)/_layout'; // 탭 네비게이터를 불러옵니다
 
 const RootLayout = () => {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <CartProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-        <Stack.Screen name="CartScreen" />
-        <Stack.Screen name="SearchScreen" />
-      </Stack>
-    </CartProvider>
+    <Stack>
+      {/* 탭 네비게이터는 스택 내에서 렌더링 */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+      {/* 추가적인 스크린들 */}
+      <Stack.Screen name="ProfileScreen" options={{ title: 'Profile' }} />
+      <Stack.Screen name="SignUpScreen" options={{ title: 'Sign Up' }} />
+      <Stack.Screen name="+not-found" />
+      <Stack.Screen name="CartScreen" />
+      <Stack.Screen name="SearchScreen" />
+    </Stack>
   );
 };
 
